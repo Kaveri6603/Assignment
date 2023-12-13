@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { RouteProps, useParams } from "react-router-dom"; // Correct import
+import { useParams } from "react-router-dom"; // Correct import
 import axios from "axios";
 import styled from "styled-components";
+import { get_provider_details } from "../utilities/requestHelper";
+import { handleApiError } from "../utilities/errorHandler";
 
 interface Contact {
 email: string,
@@ -56,17 +58,16 @@ const ApiDetails = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios
-      .get(`https://api.apis.guru/v2/${provider}.json`)
+    get_provider_details(`${provider}`)
       .then((response) => {
         const data = response.data.apis
         const providerKeyValue = Object.keys(data)
         console.log(data[`${providerKeyValue}`])
         setApiDetails(data[`${providerKeyValue}`])
+        setLoading(false);
     })
 
-      .catch((error) =>
-        console.error(`Error fetching API details for ${provider}:`, error)
+      .catch((error) => handleApiError(error, `Error fetching API details for ${provider}:` )
       ).finally(() => {
         setLoading(false);
       });

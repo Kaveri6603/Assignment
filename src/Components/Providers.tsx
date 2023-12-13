@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { get_all_providers } from "../utilities/requestHelper";
+import { handleApiError } from "../utilities/errorHandler";
 
 const RightNavigation = styled.div`
 width: 200px;
@@ -46,13 +48,11 @@ export default function Providers() {
   const [showNav, setShowNav] = useState<boolean>(false);
 
   useEffect(() => {
-    axios
-      .get("https://api.apis.guru/v2/providers.json")
-      .then((response) => {
-          setProviders(response.data.data || [])
+    get_all_providers().then((response)=> {
+      if(response){
+        setProviders(response.data.data || [])
       }
-      )
-      .catch((error) => console.error("Error fetching providers:", error));
+    }).catch((error)=> handleApiError(error))
   }, []);
   const handleProviderClick = (providerName : string) => {
     navigate(`/api-details/${providerName}`);
