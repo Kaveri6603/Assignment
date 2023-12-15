@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Correct import
+import { useNavigate, useParams } from "react-router-dom"; // Correct import
 import axios from "axios";
 import styled from "styled-components";
 import { get_provider_details } from "../utilities/requestHelper";
@@ -53,6 +53,7 @@ const ContactInfo = styled.p`
 
 const ApiDetails = () => {
   const { provider } = useParams();
+  const navigate = useNavigate();
   const [apiDetails, setApiDetails] = useState<ApiDetailsInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -89,6 +90,9 @@ const ApiDetails = () => {
           <ContactInfo> url : ${apiDetails?.info?.contact?.url}</ContactInfo>
         </>
       )}
+      <button onClick={()=>{navigate("/")}}>
+    Explore Web Apis
+  </button>
     </DetailsContainer>
   );
 };
